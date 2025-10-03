@@ -1,10 +1,9 @@
 import requests
+from config import BTC_URL
 from utils.format import satoshi_to_btc
 
-TX_URL = "https://blockchain.info/unconfirmed-transactions?format=json"
-
 def fetch_unconfirmed_txs():
-    r = requests.get(TX_URL, timeout=10)
+    r = requests.get(BTC_URL, timeout=10)
     r.raise_for_status()
     return r.json().get("txs", [])
 

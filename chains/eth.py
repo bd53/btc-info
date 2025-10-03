@@ -1,9 +1,8 @@
 import requests
-
-TX_URL = "https://api.blockcypher.com/v1/eth/main/txs"
+from config import ETH_URL
 
 def fetch_unconfirmed_txs():
-    r = requests.get(TX_URL, timeout=10)
+    r = requests.get(ETH_URL, timeout=10)
     r.raise_for_status()
     data = r.json()
     return data
