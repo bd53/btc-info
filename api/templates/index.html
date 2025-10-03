@@ -140,6 +140,9 @@
 
 <body>
   <h1>bitcoin_monitor</h1>
+  <p style="text-align: center; margin-top: -1em; margin-bottom: 2em; color: #7a92a1; font-size: 0.95rem;">
+    <strong>Current Bitcoin Price: ${{ "{:,.2f}".format(btc_price) }}</strong>
+  </p>
   <table>
     <thead>
       <tr>
@@ -149,7 +152,6 @@
         <th>To</th>
         <th>Value</th>
         <th>Status</th>
-        <th>Block</th>
       </tr>
     </thead>
     <tbody>
@@ -167,15 +169,6 @@
           {{ tx.value_str }} (~${{ "%.2f"|format(tx.usd) }})
         </td>
         <td data-label="Status">{{ tx.status }}</td>
-        <td data-label="Block">
-          {% if tx.block_height %}
-          <a href="https://www.blockchain.com/btc/block/{{ tx.block_hash }}" target="_blank" rel="noopener">
-            {{ tx.block_height }}
-          </a>
-          {% else %}
-          —
-          {% endif %}
-        </td>
       </tr>
       {% endfor %}
     </tbody>

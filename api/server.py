@@ -12,11 +12,12 @@ recent_txs = []
 
 @app.route("/")
 def index():
-    return render_template("index.html", txs=recent_txs)
+    btc_price = price_cache.get_price("BTC")
+    return render_template("index.html", txs=list(recent_txs), btc_price=btc_price)
 
 @app.route("/api/txs")
 def get_txs():
-    return jsonify(recent_txs)
+    return jsonify(list(recent_txs))
 
 @app.route("/api/stats")
 def get_stats():

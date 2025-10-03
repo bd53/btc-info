@@ -139,13 +139,13 @@ def poll_chain(chain: str, handler, price_usd: float) -> int:
     return new_tx_count
 
 def poll_loop():
-    print(f"\n{'='*60}")
+    print(f"{'─'*60}")
     print(f"Starting monitor...")
-    print(f"{'='*60}")
+    print(f"{'─'*60}")
     print(f"Monitoring chains: {', '.join(CHAINS)}")
     print(f"Poll interval: {POLL_INTERVAL}s")
     print(f"Large tx threshold: ${LARGE_TX_THRESHOLD_USD:,}")
-    print(f"{'='*60}\n")
+    print(f"{'─'*60}")
 
     chain_handlers: Dict[str, Any] = {}
     for name in CHAINS:
@@ -189,4 +189,4 @@ def poll_loop():
         if sleep_time > 0:
             time.sleep(sleep_time)
         else:
-            print(f" Warning: Poll cycle took {cycle_duration:.2f}s (longer than {POLL_INTERVAL}s interval)")
+            print(f"Warning: Poll cycle took {cycle_duration:.2f}s (longer than {POLL_INTERVAL}s interval)")
