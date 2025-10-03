@@ -1,11 +1,12 @@
 import requests
-from config import BTC_URL
 from utils.format import satoshi_to_btc
+from config import BTC_URL
 
 def fetch_unconfirmed_txs():
     r = requests.get(BTC_URL, timeout=10)
     r.raise_for_status()
     return r.json().get("txs", [])
+
 
 def parse_tx(tx):
     try:
@@ -27,5 +28,5 @@ def parse_tx(tx):
         "to": to_addr,
         "value": value_btc,
         "value_str": f"{value_btc:.8f} BTC",
-        "status": "pending",
+        "status": "pending" or "confirmed",
     }

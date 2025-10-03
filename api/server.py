@@ -1,21 +1,24 @@
-from flask import Flask, render_template, jsonify
-from watchtower import seen_tx_hashes, load_chain_handler
-from utils.price import price_cache
-from config import CHAINS
 import threading
 import time
+from flask import Flask, render_template, jsonify
+from utils.price import price_cache
+from watchtower import seen_tx_hashes, load_chain_handler
+from config import CHAINS
 
 app = Flask(__name__)
 
 recent_txs = []
 
+
 @app.route("/")
 def index():
     return render_template("index.html", txs=recent_txs)
 
+
 @app.route("/api/txs")
 def get_txs():
     return jsonify(recent_txs)
+
 
 @app.template_filter("explorer_url")
 def explorer_url_filter(tx):
@@ -23,9 +26,8 @@ def explorer_url_filter(tx):
     tx_hash = tx.get("tx_hash", "")
     if chain == "BTC":
         return f"https://www.blockchain.com/btc/tx/{tx_hash}"
-    elif chain == "ETH":
-        return f"https://etherscan.io/tx/{tx_hash}"
     return "#"
+
 
 def update_recent_txs():
     chain_handlers = {name: load_chain_handler(name) for name in CHAINS}
@@ -46,9 +48,11 @@ def update_recent_txs():
         except Exception as e:
             print(f"Error fetching {chain.upper()} txs:", e)
 
+
 def poller():
     while True:
         update_recent_txs()
         time.sleep(5)
+
 
 threading.Thread(target=poller, daemon=True).start()

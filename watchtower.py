@@ -1,13 +1,15 @@
 import importlib
 import time
-from config import POLL_INTERVAL, LARGE_TX_THRESHOLD_USD, CHAINS
 from utils.price import price_cache
+from config import POLL_INTERVAL, LARGE_TX_THRESHOLD_USD, CHAINS
 
 seen_tx_hashes = set()
+
 
 def load_chain_handler(name):
     module = importlib.import_module(f"chains.{name}")
     return module
+
 
 def process_tx(tx, price_usd):
     value_usd = tx["value"] * price_usd
@@ -17,8 +19,9 @@ def process_tx(tx, price_usd):
     print(f"Value: {tx['value_str']} (~${value_usd:.2f} USD)")
     print(f"Status: {tx['status']}")
     if value_usd > LARGE_TX_THRESHOLD_USD:
-        print("🚨 Large transaction detected! 🚨")
+        print("Large transaction detected!")
     print("-" * 40)
+
 
 def poll_loop():
     chain_handlers = {name: load_chain_handler(name) for name in CHAINS}
@@ -26,7 +29,7 @@ def poll_loop():
         for chain, handler in chain_handlers.items():
             price_usd = price_cache.get_price(chain.upper())
             if price_usd == 0:
-                print(f"⚠️ Skipping {chain.upper()} poll due to price fetch failure.")
+                print(f"Skipping {chain.upper()} poll due to price fetch failure.")
                 continue
             try:
                 txs = handler.fetch_unconfirmed_txs()
