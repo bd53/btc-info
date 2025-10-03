@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Watchtower</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 3em auto;
+      max-width: 1000px;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1em;
+      font-weight: 600;
+      color: #222;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      table-layout: fixed;
+    }
+
+    thead {
+      background: #7a92a1;
+      color: white;
+    }
+
+    th,
+    td {
+      padding: 0.75em 1em;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    td[data-label="From"],
+    td[data-label="To"],
+    td[data-label="Value"] {
+      white-space: normal;
+      word-break: break-word;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    td[data-label="TX Hash"] {
+      font-family: monospace;
+      white-space: normal;
+      word-break: break-all;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    th:nth-child(1) {
+      width: 70px;
+    }
+
+    th:nth-child(2) {
+      width: 220px;
+    }
+
+    th:nth-child(6) {
+      width: 80px;
+    }
+
+    tbody tr:hover {
+      background: #f1faff;
+    }
+
+    .large {
+      color: #bb6060;
+      font-weight: 700;
+    }
+
+    a.tx-link {
+      color: #7a92a1;
+      text-decoration: none;
+    }
+
+    a.tx-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+      }
+
+      thead tr {
+        display: none;
+      }
+
+      tbody tr {
+        margin-bottom: 1em;
+        background: white;
+        padding: 1em;
+        border-radius: 6px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      td {
+        border: none;
+        padding-left: 50%;
+        position: relative;
+        text-align: right;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      td::before {
+        position: absolute;
+        left: 1em;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #555;
+        content: attr(data-label);
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Watchtower</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Chain</th>
+        <th>TX Hash</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Value</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tx in txs %}
+      <tr>
+        <td data-label="Chain">{{ tx.chain }}</td>
+        <td data-label="TX Hash">
+          <a href="{{ tx | explorer_url }}" target="_blank" rel="noopener" class="tx-link" title="View on Explorer">
+            {{ tx.tx_hash }}
+          </a>
+        </td>
+        <td data-label="From">{{ tx.from }}</td>
+        <td data-label="To">{{ tx.to }}</td>
+        <td data-label="Value" {% if tx.usd> 500 %}class="large"{% endif %}>
+          {{ tx.value_str }} (~${{ "%.2f"|format(tx.usd) }})
+        </td>
+        <td data-label="Status">{{ tx.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+
+</html>
