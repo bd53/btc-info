@@ -20,6 +20,9 @@ def parse_tx(tx):
         to_addr = "unknown"
         value_btc = 0.0
 
+    confirmations = tx.get("confirmations", 0)
+    status = "confirmed" if confirmations > 0 else "pending"
+
     return {
         "chain": "BTC",
         "tx_hash": tx.get("hash"),
@@ -27,5 +30,6 @@ def parse_tx(tx):
         "to": to_addr,
         "value": value_btc,
         "value_str": f"{value_btc:.8f} BTC",
-        "status": "pending" or "confirmed",
+        "status": status,
+        "confirmations": confirmations,
     }
