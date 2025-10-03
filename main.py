@@ -35,14 +35,14 @@ def run_web_server():
         raise
 
 def print_banner():
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
     print("                     ₿ BITCOIN MONITOR")
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
     print("Choose mode:")
     print("  1. Web Dashboard (Flask server + auto-open browser)")
     print("  2. Console Monitor (terminal output only)")
     print("  3. Both (Web Dashboard + Console Monitor)")
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
 
 if __name__ == "__main__":
     print_banner()

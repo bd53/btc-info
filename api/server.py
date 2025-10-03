@@ -37,7 +37,7 @@ def get_stats():
 @app.template_filter("explorer_url")
 def explorer_url_filter(tx):
     chain = tx.get("chain", "").upper()
-    tx_hash = tx.get("tx_hash", "")
+    tx_hash = tx.get("hash", "")
 
     if chain == "BTC":
         return f"https://www.blockchain.com/btc/tx/{tx_hash}"
@@ -67,10 +67,10 @@ def update_recent_txs():
                 try:
                     tx = handler.parse_tx(tx_raw)
 
-                    if not tx.get("tx_hash"):
+                    if not tx.get("hash"):
                         continue
 
-                    if add_to_seen_hashes(tx["tx_hash"]):
+                    if add_to_seen_hashes(tx["hash"]):
                         continue
 
                     value_usd = tx["value"] * price_usd

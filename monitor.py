@@ -70,26 +70,29 @@ def process_tx(tx: Dict[str, Any], price_usd: float):
 
     timestamp = datetime.now().strftime("%H:%M:%S")
 
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
     title = f"[{timestamp}] [{tx['chain']}] New Transaction"
     if is_large:
         title += " 🚩"
     print(title)
-    print(f"{'─'*60}")
-    print(f"Hash: {tx['tx_hash']}")
-    print(f"From: {tx['from']}")
-    print(f"To: {tx['to']}")
-    print(f"Value: {tx['value_str']}")
-    print(f"USD: {format_value_with_color(value_usd, LARGE_TX_THRESHOLD_USD)}")
+    print(f"{'─' * 60}")
+    print(f"{'─' * 60}")
+    print(f"Hash: {tx['hash']}")
+    print(f"Sender: {tx['sender']}")
+    print(f"Receiver: {tx['receiver']}")
+    print(f"Value: {tx['value_str']} (${tx['value_usd']:.2f} USD)")
+    print(f"Fee: {tx['fee_str']} (${tx['fee_usd']:.2f} USD)")
+    print(f"USD: {format_value_with_color(tx['value_usd'], LARGE_TX_THRESHOLD_USD)}")
     print(f"Status: {tx['status']}")
-    print(f"{'─'*60}")
+    print(f"Timestamp: {tx['timestamp']}")
+    print(f"{'─' * 60}")
 
 def print_statistics():
     uptime = time.time() - stats["start_time"]
     hours = int(uptime // 3600)
     minutes = int((uptime % 3600) // 60)
 
-    print(f"\n{'─'*60}")
+    print(f"\n{'─' *60 }")
     print("                     ₿ BITCOIN MONITOR")
     print(f"{'─'*60}")
     print(f"Uptime: {hours}h {minutes}m")
@@ -104,7 +107,7 @@ def print_statistics():
             avg_value = data["total_value"] / data["count"] if data["count"] > 0 else 0
             print(f"  {chain}: {data['count']} txs, avg ${avg_value:,.2f}")
 
-    print(f"{'─'*60}\n")
+    print(f"{'─' * 60}\n")
 
 def poll_chain(chain: str, handler, price_usd: float) -> int:
     new_tx_count = 0
@@ -119,10 +122,10 @@ def poll_chain(chain: str, handler, price_usd: float) -> int:
             try:
                 tx = handler.parse_tx(tx_raw)
 
-                if not tx.get("tx_hash"):
+                if not tx.get("hash"):
                     continue
 
-                if add_to_seen_hashes(tx["tx_hash"]):
+                if add_to_seen_hashes(tx["hash"]):
                     continue
 
                 process_tx(tx, price_usd)
@@ -139,13 +142,13 @@ def poll_chain(chain: str, handler, price_usd: float) -> int:
     return new_tx_count
 
 def poll_loop():
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
     print(f"Starting monitor...")
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
     print(f"Monitoring chains: {', '.join(CHAINS)}")
     print(f"Poll interval: {POLL_INTERVAL}s")
     print(f"Large tx threshold: ${LARGE_TX_THRESHOLD_USD:,}")
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
 
     chain_handlers: Dict[str, Any] = {}
     for name in CHAINS:
@@ -159,7 +162,7 @@ def poll_loop():
         print("✗ No valid chain handlers loaded. Exiting.")
         return
 
-    print(f"\n{'─'*60}\n")
+    print(f"\n{'─' * 60}\n")
 
     poll_count = 0
     stats_interval = 20
