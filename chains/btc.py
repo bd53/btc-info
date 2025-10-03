@@ -7,7 +7,6 @@ def fetch_unconfirmed_txs():
     r.raise_for_status()
     return r.json().get("txs", [])
 
-
 def parse_tx(tx):
     try:
         from_addr = tx["inputs"][0]["prev_out"].get("addr", "unknown")

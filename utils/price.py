@@ -4,7 +4,6 @@ from config import PRICE_URL
 
 CACHE_DURATION = 60
 
-
 class PriceCache:
     def __init__(self):
         self.cache = {}
